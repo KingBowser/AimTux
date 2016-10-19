@@ -20,6 +20,7 @@ private:
 	ToggleSwitch* ts_chest;
 	ToggleSwitch* ts_arms;
 	ToggleSwitch* ts_legs;
+
 public:
-	TriggerbotWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor);
+	TriggerbotWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor);
 };

@@ -1,13 +1,8 @@
 #include "draw.h"
 
-FONT Draw::CreateFont(const char* fontName, int size)
-{
-	FONT newFont = surface->CreateFont();
-
-	surface->SetFontGlyphSet(newFont, fontName, size, 0, 0, 0, 0x80);
-
-	return newFont;
-}
+/*
+ * Draw::CreateFont()
+ */
 
 FONT Draw::CreateFont(const char* fontName, int size, int flag)
 {
@@ -18,15 +13,14 @@ FONT Draw::CreateFont(const char* fontName, int size, int flag)
 	return newFont;
 }
 
-Vector2D Draw::GetTextSize(std::string text, FONT font)
+FONT Draw::CreateFont(const char* fontName, int size)
 {
-	int x = 0;
-	int y = 0;
-	
-	surface->GetTextSize(font, std::wstring (text.begin(), text.end()).c_str(), x, y);
-
-	return LOC(x, y);
+	return Draw::CreateFont(fontName, size, 0x80);
 }
+
+/*
+ * Draw::GetTextSize()
+ */
 
 Vector2D Draw::GetTextSize(const wchar_t* text, FONT font)
 {
@@ -38,32 +32,45 @@ Vector2D Draw::GetTextSize(const wchar_t* text, FONT font)
 	return LOC(x, y);
 }
 
-void Draw::DrawString(std::string text, Vector2D location, Color color, FONT font)
+Vector2D Draw::GetTextSize(std::wstring text, FONT font)
 {
-	std::wstring wtext = std::wstring(text.begin(), text.end());
-	
+	return Draw::GetTextSize(text.c_str(), font);
+}
+
+/*
+ * Draw::DrawString()
+ * Draw::DrawCenteredString()
+ */
+
+void Draw::DrawString(std::wstring text, Vector2D location, Color color, FONT font)
+{
 	surface->DrawSetTextColor(color.r, color.g, color.b, color.a);
 	surface->DrawSetTextFont(font);
 	surface->DrawSetTextPos((int) location.x, (int) location.y);
 
-	surface->DrawPrintText(wtext.c_str(), wtext.length());
+	surface->DrawPrintText(text.c_str(), text.length());
 }
 
-void Draw::DrawCenteredString(std::string text, Vector2D location, Color color, FONT font)
+void Draw::DrawCenteredString(std::wstring text, Vector2D location, Color color, FONT font)
 {
-	std::wstring wtext = std::wstring(text.begin(), text.end());
-	
-	Vector2D textSize = GetTextSize(wtext.c_str(), font);
-
+	Vector2D textSize = GetTextSize(text, font);
 	location.x -= textSize.x / 2;
 	location.y -= textSize.y / 2;
 
-	surface->DrawSetTextColor(color.r, color.g, color.b, color.a);
-	surface->DrawSetTextFont(font);
-	surface->DrawSetTextPos((int) location.x, (int) location.y);
-
-	surface->DrawPrintText(wtext.c_str(), wtext.length());
+    Draw::DrawString(text, location, color, font);
 }
+
+/*
+ * Draw::DrawCircle()
+ * Draw::DrawRect()
+ * Draw::DrawBox()
+ * Draw::DrawOutlinedBox()
+ * Draw::DrawPolygon()
+ * Draw::DrawPolygonOutline()
+ * Draw::DrawLine()
+ * Draw::DrawPolyLine()
+ * etc...
+ */
 
 void Draw::DrawCircle(Vector2D position, float points, float radius, Color color)
 {

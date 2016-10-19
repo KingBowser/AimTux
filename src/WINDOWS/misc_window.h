@@ -22,6 +22,6 @@ private:
 	TextBox* tb_clantag;
 	ToggleSwitch* ts_clantag_animation;
 public:
-	MiscWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor);
+	MiscWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor);
 	void SetClanTag ();
 };

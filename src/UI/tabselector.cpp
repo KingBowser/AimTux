@@ -1,10 +1,12 @@
 #include "tabselector.h"
 
+/*
+ * class TabSelector : public Panel
+ */
+
 TabSelector::TabSelector (Vector2D position, Vector2D size, std::vector<TabElement> tabs)
+    : Panel(position, size)
 {
-	this->position = position;
-	this->size = size;
-	
 	this->currentPanel = tabs[0].panel;
 	
 	int tab_width = size.x / tabs.size();
@@ -20,6 +22,9 @@ TabSelector::TabSelector (Vector2D position, Vector2D size, std::vector<TabEleme
 	this->currentPanel->shown = true;
 }
 
+/*
+ * class Tab : public Button
+ */
 
 Tab::Tab (Vector2D position, Vector2D size, Panel** targetPanel, TabElement info)
 	: Button (info.name, position, size)

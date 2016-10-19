@@ -26,7 +26,7 @@ void Slider::Draw ()
 	pstring _text;
 
 	if (text.length() > 0)
-		_text << text << " ";
+		_text << text << L" ";
 
 	_text << (ROUNDF (*value, 100));
 	

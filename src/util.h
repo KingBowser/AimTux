@@ -8,5 +8,5 @@ namespace Util {
 	char GetButtonString(ButtonCode_t key);
 	char GetUpperValueOf(ButtonCode_t key);
 	std::string ReplaceString(std::string subject, const std::string& search, const std::string& replace);
-	void StdReplaceStr(std::string&, const std::string&, const std::string&);
+	template<typename ST> void StdReplaceStr(ST&, const ST&, const ST&);
 }

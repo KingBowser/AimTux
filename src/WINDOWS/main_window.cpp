@@ -2,7 +2,7 @@
 
 MainWindow* main_window = nullptr;
 
-MainWindow::MainWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor)
+MainWindow::MainWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor)
 	: Window::Window (title, size, position, backgroundColor, false)
 {
 	
@@ -16,11 +16,11 @@ MainWindow::MainWindow (std::string title, Vector2D size, Vector2D position, Col
 	std::vector<TabElement> tabs
 	(
 		{
-			TabElement ("Aimbot", pl_aimbot),
-			TabElement ("Triggerbot", pl_triggerbot),
-			TabElement ("Visuals", pl_visuals),
-			TabElement ("HVH", pl_hvh),
-			TabElement ("Misc", pl_misc)
+			TabElement (L"Aimbot", pl_aimbot),
+			TabElement (L"Triggerbot", pl_triggerbot),
+			TabElement (L"Visuals", pl_visuals),
+			TabElement (L"HVH", pl_hvh),
+			TabElement (L"Misc", pl_misc)
 		}
 	);
 	

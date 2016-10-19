@@ -18,5 +18,5 @@ private:
 	Panel* pl_hvh;
 	Panel* pl_misc;
 public:
-	MainWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor);
+	MainWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor);
 };

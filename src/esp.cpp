@@ -1,5 +1,8 @@
 #include "esp.h"
 
+#include <locale>
+#include <codecvt>
+
 bool Settings::ESP::enabled	= true;
 Color Settings::ESP::ally_color = Color(0, 50, 200);
 Color Settings::ESP::enemy_color = Color(200, 0, 50);
@@ -263,7 +266,7 @@ void ESP::DrawBombBox(C_BasePlantedC4* entity)
 	Vector vecOrigin = entity->GetVecOrigin();
 	Vector vecViewOffset = Vector(vecOrigin.x, vecOrigin.y, vecOrigin.z - 4);
 
-	pstring str = "C4";
+	pstring str = L"C4";
 
 	if (bombTime > 0)
 		str << " (" << bombTime << ")";
@@ -272,14 +275,19 @@ void ESP::DrawBombBox(C_BasePlantedC4* entity)
 	if (!WorldToScreen(vecOrigin, s_vecLocalPlayer_s))
 	{
 		DrawESPBox(vecOrigin, vecViewOffset, color, width, additionalHeight);
-		Draw::DrawCenteredString(str.c_str(), LOC(s_vecLocalPlayer_s.x, s_vecLocalPlayer_s.y), colorText, esp_font);
+		Draw::DrawCenteredString(str, LOC(s_vecLocalPlayer_s.x, s_vecLocalPlayer_s.y), colorText, esp_font);
 	}
 }
 
 void ESP::DrawWeaponText(C_BaseEntity* entity, ClientClass* client)
 {
-	std::string modelName = std::string(client->m_pNetworkName);
-	if (strstr(modelName.c_str(), "Weapon"))
+	std::wstring modelName;
+    {
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; // extra careful since I have no idea what valve's practice for non-ASCII chars in m_pNetworkName is 
+        modelName = converter.from_bytes(client->m_pNetworkName);
+    }
+
+	if (modelName.find(L"Weapon"))
 		modelName = modelName.substr(7, modelName.length() - 7);
 	else
 		modelName = modelName.substr(1, modelName.length() - 1);
@@ -290,7 +298,7 @@ void ESP::DrawWeaponText(C_BaseEntity* entity, ClientClass* client)
 
 	Vector s_vecLocalPlayer_s;
 	if (!WorldToScreen(vecOrigin, s_vecLocalPlayer_s))
-		Draw::DrawCenteredString(modelName.c_str(), LOC(s_vecLocalPlayer_s.x, s_vecLocalPlayer_s.y), Color(255, 255, 255, 255), esp_font);
+		Draw::DrawCenteredString(modelName, LOC(s_vecLocalPlayer_s.x, s_vecLocalPlayer_s.y), Color(255, 255, 255, 255), esp_font);
 }
 
 void ESP::DrawGlow()

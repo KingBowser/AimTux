@@ -108,7 +108,8 @@ std::string Util::ReplaceString(std::string subject, const std::string& search, 
 	return subject;
 }
 
-void Util::StdReplaceStr(std::string& replaceIn, const std::string& replace, const std::string& replaceWith)
+template<typename ST>
+void Util::StdReplaceStr(ST& replaceIn, const ST& replace, const ST& replaceWith)
 {
     size_t const span = replace.size();
     size_t const step = replaceWith.size(); 
@@ -118,7 +119,7 @@ void Util::StdReplaceStr(std::string& replaceIn, const std::string& replace, con
     {
         index = replaceIn.find(replace, index);
 
-        if (index == std::string::npos)
+        if (index == ST::npos)
             break;
 
         replaceIn.replace(index, span, replaceWith);

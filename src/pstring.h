@@ -3,27 +3,27 @@
 #include <string>
 #include <sstream>
 
-class pstring : public std::string
+class pstring : public std::wstring
 {
 public:
-    pstring(): std::string() {}
+    pstring(): std::wstring() {}
 
     template<typename T>
-    pstring(const T v): std::string(v) {}
+    pstring(const T v): std::wstring(v) {}
 
     template<typename T>
     pstring& operator<<(const T s)
 	{
-		std::stringstream stream;
+		std::wstringstream stream;
 		stream << *this;
 		stream << s;
 		*this = stream.str();
 		return *this;
     }
 	
-	pstring& operator+(const unsigned int i)
+	pstring& operator+(const unsigned int i) // literally not that hard to do in vanilla - string(i) + myString
 	{
-		std::stringstream stream;
+		std::wstringstream stream;
 		stream << *this;
 		stream << i;
 		*this = stream.str();

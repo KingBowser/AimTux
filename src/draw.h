@@ -12,12 +12,23 @@
 
 namespace Draw
 {
+    /*
+     * Text
+     */
+
 	FONT CreateFont(const char* fontName, int size);
 	FONT CreateFont(const char* fontName, int size, int flag);
+
 	Vector2D GetTextSize(const wchar_t* input, FONT font);
-	Vector2D GetTextSize(std::string text, FONT font);
-	void DrawCenteredString(std::string text, Vector2D location, Color color, FONT font);
-	void DrawString(std::string text, Vector2D location, Color color, FONT font);
+	Vector2D GetTextSize(std::wstring text, FONT font);
+
+	void DrawCenteredString(std::wstring text, Vector2D location, Color color, FONT font);
+	void DrawString(std::wstring text, Vector2D location, Color color, FONT font);
+
+    /*
+     * Geometry
+     */
+
 	void DrawRect(Vector2D start, Vector2D end, Color color);
 	void DrawBox(Vector2D start, Vector2D end, Color color);
 	void DrawLine(Vector2D start, Vector2D end, Color color);

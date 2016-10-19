@@ -29,5 +29,5 @@ private:
 	ToggleSwitch* ts_bomb;
 	ToggleSwitch* ts_weapons;
 public:
-	ESPWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor);
+	ESPWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor);
 };

@@ -3,21 +3,25 @@
 #include "component.h"
 #include "../settings.h"
 
-#define BANNER_TEXT_GAP 10
 
 class Banner : public Component
 {
 public:
+
+    /* static */
+    static int const BANNER_TEXT_GAP = 10;
+
+    /* instance */
 	
 	std::function<void()> OnClickedEvent;
 	Vector2D text_size;
-	std::string text = "button";
+	std::wstring text = L"banner";
 	
-	Banner (std::string text, Vector2D position, int width)
+	Banner (std::wstring text, Vector2D position, int width)
+        : Component(position)
+        , text(text)
 	{
-		this->position = position;
-		this->text = text;
-		text_size = Draw::GetTextSize (this->text.c_str(), normal_font);
+		text_size = Draw::GetTextSize (this->text, normal_font);
 		this->size = LOC (width, text_size.y);
 	}
 	

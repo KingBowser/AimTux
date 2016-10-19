@@ -28,6 +28,15 @@ void GetCString(Json::Value &config, char* &setting)
 	setting = strdup(config.asCString());
 }
 
+void GetWString(Json::Value &config, std::wstring* /* see other comment */ setting)
+{
+    if (config.isNull())
+        return;
+
+    std::string asString = config.asString();
+    *setting = std::wstring(asString.begin(), asString.end());
+}
+
 void GetString(Json::Value &config, std::string* /* references are for pussies */ setting)
 {
 	if (config.isNull())
@@ -185,7 +194,7 @@ void Settings::LoadDefaultsOrSave(const char* filename)
 
 	settings["ShowSpectators"]["enabled"] = Settings::ShowSpectators::enabled;
 
-	settings["ClanTagChanger"]["value"] = Settings::ClanTagChanger::value;
+	settings["ClanTagChanger"]["value"] = std::string(Settings::ClanTagChanger::value.begin(), Settings::ClanTagChanger::value.end());
 	settings["ClanTagChanger"]["enabled"] = Settings::ClanTagChanger::enabled;
 
 	std::ofstream(GetSettingsPath(filename)) << styledWriter.write(settings);
@@ -320,7 +329,7 @@ void Settings::LoadSettings(const char* filename)
 
 		GetBool(settings["ShowSpectators"]["enabled"], Settings::ShowSpectators::enabled);
 
-		GetString(settings["ClanTagChanger"]["value"], &Settings::ClanTagChanger::value);
+		GetWString(settings["ClanTagChanger"]["value"], &Settings::ClanTagChanger::value);
 		GetBool(settings["ClanTagChanger"]["enabled"], Settings::ClanTagChanger::enabled);
 	}
 	else

@@ -1,10 +1,15 @@
 #include "showspectators.h"
 
+#include <locale>
+#include <codecvt>
+
 bool Settings::ShowSpectators::enabled = true;
 
-std::list<std::string> GetObservervators(C_BaseEntity* pEntity)
+std::list<std::wstring> GetObservervators(C_BaseEntity* pEntity)
 {
-	std::list<std::string> list;
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> strconv;
+
+	std::list<std::wstring> list; 
 
 	for (int i = 0; i < engine->GetMaxClients(); ++i)
 	{
@@ -28,7 +33,7 @@ std::list<std::string> GetObservervators(C_BaseEntity* pEntity)
 		if (strcmp(entityInformation.guid, "BOT") == 0)
 			continue;
 
-		list.push_back(entityInformation.name);
+		list.push_back(strconv.from_bytes(entityInformation.name));
 	}
 
 	return list;
@@ -46,7 +51,7 @@ void ShowSpectators::PaintTraverse(VPANEL vgui_panel, bool force_repaint, bool a
 	if (localplayer->GetLifeState() != LIFE_ALIVE || localplayer->GetHealth() == 0)
 		return;
 
-	std::list<std::string> observators = GetObservervators(localplayer);
+	std::list<std::wstring> observators = GetObservervators(localplayer);
 	if (observators.size() == 0)
 		return;
 
@@ -54,9 +59,9 @@ void ShowSpectators::PaintTraverse(VPANEL vgui_panel, bool force_repaint, bool a
 	pstring text;
 	text << "Spectators (" << observators.size() << "):";
 
-	Draw::DrawString(text.c_str(), LOC(10, 400), Color(255, 255, 255), normal_font);
+	Draw::DrawString(text, LOC(10, 400), Color(255, 255, 255), normal_font);
 
-	for (std::string name : observators)
+	for (std::wstring name : observators)
 	{
 		Draw::DrawString(name.c_str(), LOC(10, 400 + 20 * index), Color(255, 255, 255), normal_font);
 		index++;

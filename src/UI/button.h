@@ -9,7 +9,7 @@ public:
 	
 	std::function<void()> OnClickedEvent;
 	
-	std::string text = "button";
+	std::wstring text = L"button";
 	
 	bool clickStarted = false;
 	
@@ -32,12 +32,10 @@ public:
 		clickStarted = false;
 	}
 	
-	Button (std::string text, Vector2D position, Vector2D size)
+	Button (std::wstring text, Vector2D position, Vector2D size)
+        : Component(position, size)
+        , text(text)
 	{
-		this->position = position;
-		this->size = size;
-		this->text = text;
-		
 		onMouseClickEndEvent	= MFUNC (&Button::Event_OnMouseClickEnd, this);
 		onMouseClickStartEvent	= MFUNC (&Button::Event_OnMouseClickStart, this);
 		onMouseLeaveEvent		= MFUNC (&Button::Event_OnMouseLeave, this);
@@ -55,8 +53,10 @@ public:
 class OutlinedButton : public Button
 {
 public:
-	OutlinedButton (std::string text, Vector2D position, Vector2D size)
-						: Button (text, position, size) { }
+	OutlinedButton (std::wstring text, Vector2D position, Vector2D size)
+        : Button (text, position, size) 
+    { 
+    }
 	
 	void Draw ()
 	{

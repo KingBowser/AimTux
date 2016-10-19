@@ -19,18 +19,16 @@ private:
 	
 public:
 	
-	std::string* strp;
-	std::string shadow_text = "textbox";
+	std::wstring* strp;
+	std::wstring shadow_text = L"textbox"; 
 	
-	TextBox (std::string shadow, std::string* textref, Vector2D position, Vector2D size)
-		: shadow_text(shadow)
+	TextBox (std::wstring shadow, std::wstring* textref, Vector2D position, Vector2D size)
+		: Component(position, size)
+        , shadow_text(shadow)
 		, strp(textref)
 	{
-		this->size = size;
-		this->position = position;
-
 		// Get the width if the monospaced font
-		font_size = Draw::GetTextSize ("j", mono_font);
+		font_size = Draw::GetTextSize (L"j", mono_font);
 		
 		// set the default caret_stamp to the current tick_count
 		s_caret_stamp = globalvars->tickcount;
@@ -47,12 +45,11 @@ public:
 		
 		
 		int text_max_fit = (size.x-20) / font_size.x;
-		
-		const char* sectioned_text = (strp->size() > text_max_fit ? &strp->c_str()[strp->size() - text_max_fit] : strp->c_str());
-		
-		int sectioned_text_size = strlen(sectioned_text);
-		
-		DrawString (sectioned_text, mono_font, text_color, LOC (10, (size.y / 2) - (font_size.y / 2)));
+	
+        const wchar_t* sectioned_text = (strp->size() > text_max_fit ? &strp->c_str()[strp->size() - text_max_fit] : strp->c_str());
+        size_t sectioned_text_size = wcslen(sectioned_text);
+
+        DrawString (sectioned_text, mono_font, text_color, LOC (10, (size.y / 2) - (font_size.y / 2)));
 		
 		int current_tick = globalvars->tickcount;
 		
@@ -130,7 +127,7 @@ public:
 			std::find(lastPressedKeys.begin(), lastPressedKeys.end(), KEY_SPACE) == lastPressedKeys.end()
 			)
 		{
-			strp->operator+=(" ");
+			strp->operator+=(L" ");
 		}
 		
 		lastPressedKeys = pressedKeys;
@@ -142,7 +139,7 @@ class ValueTextBox : public TextBox
 public:
 	pstring text;
 
-	ValueTextBox(std::string shadow, std::string val, Vector2D pos, Vector2D size)
+	ValueTextBox(std::wstring shadow, std::wstring val, Vector2D pos, Vector2D size)
 		: text(val)
 		, TextBox(shadow, &text, pos, size)
 	{

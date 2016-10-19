@@ -310,7 +310,7 @@ namespace Settings
 
 	namespace ClanTagChanger
 	{
-		extern std::string value;
+		extern std::wstring value;
 		extern bool animation;
 		extern bool enabled;
 	}

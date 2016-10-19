@@ -11,7 +11,7 @@
 int titleBarHeight = 40;
 
 
-Window::Window (std::string title)
+Window::Window (std::wstring title)
 {
 	this->title = title;
 	
@@ -25,7 +25,7 @@ Window::Window (std::string title)
 }
 
 
-Window::Window (std::string title, Vector2D size) : Window (title)
+Window::Window (std::wstring title, Vector2D size) : Window (title)
 {
 	this->size = size;
 	
@@ -34,13 +34,13 @@ Window::Window (std::string title, Vector2D size) : Window (title)
 }
 
 
-Window::Window (std::string title, Vector2D size, Vector2D position) : Window (title, size)
+Window::Window (std::wstring title, Vector2D size, Vector2D position) : Window (title, size)
 {
 	this->position = position;
 }
 
 
-Window::Window (std::string title, Vector2D size, Vector2D position, Color color, bool draggable) : Window (title, size, position)
+Window::Window (std::wstring title, Vector2D size, Vector2D position, Color color, bool draggable) : Window (title, size, position)
 {
 	this->draggable = draggable;
 	this->backGroundColor = color;
@@ -101,5 +101,5 @@ void TitleBar::Draw ()
 	}
 	
 	Clear (Settings::UI::mainColor);
-	DrawCenteredString (parentWindow->title.c_str(), title_font, foreColor, LOC (size.x / 2, size.y / 2));
+	DrawCenteredString (parentWindow->title, title_font, foreColor, LOC (size.x / 2, size.y / 2));
 }

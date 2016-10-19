@@ -11,20 +11,22 @@ class Slider : public Component
 protected:
 	Color text_color = Color (255, 255, 255, 255);
 	Color background_color = Color (160, 160, 160, 80);
+
 private:
 	float* value;
 	const float MIN;
 	const float MAX;
+
 public:
-	std::string text = "slider";
+	std::wstring text = L"slider";
 	
-	Slider (std::string text, Vector2D position, Vector2D size, float* value, float MIN, float MAX)
-			: MIN (MIN), MAX (MAX)
+	Slider (std::wstring text, Vector2D position, Vector2D size, float* value, float MIN, float MAX)
+			: Component(position, size)
+            , text(text)
+            , value(value)
+            , MIN (MIN)
+            , MAX (MAX)
 	{
-		this->position = position;
-		this->size = size;
-		this->text = text;
-		this->value = value;
 	}
 	
 	void MouseTick (PositionContext context);

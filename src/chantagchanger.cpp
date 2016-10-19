@@ -1,7 +1,7 @@
 #include "chantagchanger.h"
 #include "util.h"
 
-std::string Settings::ClanTagChanger::value = "";
+std::wstring Settings::ClanTagChanger::value = L"";
 bool Settings::ClanTagChanger::animation = false;
 bool Settings::ClanTagChanger::enabled = false; // TODO find a way to go back to the "official" clan tag for the player?
 
@@ -49,8 +49,8 @@ void ClanTagChanger::CreateMove(CUserCmd* cmd)
 	}
 	else 
 	{
-		std::string ctWithEscapesProcessed = std::string(Settings::ClanTagChanger::value);
-		Util::StdReplaceStr(ctWithEscapesProcessed, "\\n", "\n"); // compute time impact? also, referential so i assume RAII builtin cleans it up...
-		SendClanTag(ctWithEscapesProcessed.c_str(), "");
+		std::wstring ctWithEscapesProcessed = std::wstring(Settings::ClanTagChanger::value);
+		Util::StdReplaceStr<std::wstring>(ctWithEscapesProcessed, L"\\n", L"\n"); // compute time impact? also, referential so i assume RAII builtin cleans it up...
+		SendClanTag(std::string(ctWithEscapesProcessed.begin(), ctWithEscapesProcessed.end()).c_str() /* i feel dirty */, "");
 	}
 }

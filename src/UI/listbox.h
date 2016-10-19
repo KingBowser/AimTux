@@ -9,13 +9,13 @@
 
 struct LB_Element
 {
-	std::string name;
+	std::wstring name;
 	unsigned int value;
 	
-	LB_Element (std::string name, unsigned int value)
+	LB_Element (std::wstring name, unsigned int value)
+        : name(name)
+        , value(value)
 	{
-		this->name = name;
-		this->value = value;
 	}
 };
 
@@ -35,11 +35,11 @@ public:
 		*static_cast<unsigned int*>((void*)setting) = element->value;
 	}
 	
-	LB_Button (std::string text, Vector2D position, Vector2D size, T* setting, LB_Element* element)
+	LB_Button (std::wstring text, Vector2D position, Vector2D size, T* setting, LB_Element* element)
 		: Button (text, position, size)
+        , element(element)
+        , setting(setting)
 	{
-		this->element = element;
-		this->setting = setting;
 		this->OnClickedEvent = MFUNC (&LB_Button::OnClicked, this);
 	}
 	
@@ -57,60 +57,63 @@ public:
 };
 
 template<typename E>
-class ListBox : public Panel
+class LBBase : public Panel
 {
 protected:
-	Color background_color = Color (160, 160, 160, 4);
+    Color background_color = Color(160, 160, 160, 4);
+
 public:
-	std::string text = "listbox";
-	std::vector<LB_Element> elements;
-	E* setting;
+    std::wstring text = "listbox";
+    std::vector<LB_Element> elements;
+    E* setting;
+
+    LBBase<E> (std::wstring text, Vector2D position, E* setting, std::vector<LB_Element> elements)
+        : Panel(position)
+        , text(text)
+        , elements(elements)
+        , setting(setting)
+    {
+    }
+
+    void Draw ()
+    {
+        Clear (background_color);
+
+        DrawRectangle (LOC (0, 0), this->size, Settings::UI::mainColor);
+
+        Panel::Draw ();
+    }
+};
+
+template<typename E>
+class ListBox : public LBBase<E>
+{
+public:
 	
-	ListBox<E> (std::string text, Vector2D position, int width, E* setting, std::vector<LB_Element> elements)
+	ListBox<E> (std::wstring text, Vector2D position, int width, E* setting, std::vector<LB_Element> elements)
+        : LBBase<E> (text, position, setting, elements)
 	{
-		this->position = position;
-		this->text = text;
-		this->elements = elements;
-		this->setting = setting;
-		
 		for (int i = 0; i < elements.size(); i++)
 		{
 			LB_Element* element = &this->elements[i];
 			
 			LB_Button<E>* new_button = new LB_Button<E> (element->name, LOC (10, 10 + (i * LB_ELEMENT_HEIGHT) + (i * LB_ELEMENT_SEPARATOR_WIDTH)), LOC (width - 20, LB_ELEMENT_HEIGHT), this->setting, element);
-			AddComponent (new_button);
+            Panel::AddComponent (new_button);
 		}
 		
 		this->size = Vector2D (width, (elements.size() * LB_ELEMENT_HEIGHT) + (10 + (elements.size() * LB_ELEMENT_SEPARATOR_WIDTH)));
 	}
 	
-	void Draw ()
-	{
-		Clear (background_color);
-		
-		DrawRectangle (LOC (0, 0), this->size, Settings::UI::mainColor);
-		
-		Panel::Draw ();
-	}
 };
 
 template<typename E>
-class StackedListBox : public Panel
+class StackedListBox : public LBBase<E>
 {
-protected:
-	Color background_color = Color (160, 160, 160, 4);
 public:
-	std::string text = "listbox";
-	std::vector<LB_Element> elements;
-	E* setting;
 	
-	StackedListBox<E> (std::string text, Vector2D position, int width, int elements_x, E* setting, std::vector<LB_Element> elements)
+	StackedListBox<E> (std::wstring text, Vector2D position, int width, int elements_x, E* setting, std::vector<LB_Element> elements)
+        : LBBase<E> (text, position, setting, elements)
 	{
-		this->position = position;
-		this->text = text;
-		this->elements = elements;
-		this->setting = setting;
-		
 		int elementWidth = ((width - (10 + (elements_x * 10))) / elements_x);
 		
 		int x = 0, y = 0;
@@ -118,35 +121,25 @@ public:
 		{
 			if (x == elements_x)
 			{
-				y++;
+				++y;
 				x = 0;
 			}
 			
 			LB_Element* element = &this->elements[i];
 			
 			LB_Button<E>* new_button = new LB_Button<E> (
-				
 				element->name,
 				LOC ((x * elementWidth) + (10 + (x * 10)), (y * LB_ELEMENT_HEIGHT) + (10 + (y * 10))),
 				LOC (elementWidth - 20, LB_ELEMENT_HEIGHT),
 				this->setting,
 				element
-				
-				);
-			AddComponent (new_button);
+			);
+
+            Panel::AddComponent (new_button);
 			
-			x++;
+			++x;
 		}
 		
 		this->size = Vector2D (width, ((y+1) * LB_ELEMENT_HEIGHT) + (10 + ((y+1) * LB_ELEMENT_SEPARATOR_WIDTH)));
-	}
-	
-	void Draw ()
-	{
-		Clear (background_color);
-		
-		DrawRectangle (LOC (0, 0), this->size, Settings::UI::mainColor);
-		
-		Panel::Draw ();
 	}
 };

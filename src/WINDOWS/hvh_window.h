@@ -14,5 +14,5 @@ private:
 	ListBox<AntiAimType_Y>* lb_antiaim_y;
 	ToggleSwitch* ts_antiaim_y;
 public:
-	HVHWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor);
+	HVHWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor);
 };

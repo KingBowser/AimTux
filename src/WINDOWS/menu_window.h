@@ -26,5 +26,5 @@ private:
 	void save2_button_clicked ();
 
 public:
-	MenuWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor);
+	MenuWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor);
 };

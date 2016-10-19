@@ -42,8 +42,11 @@ void Spammer::CreateMove(CUserCmd* cmd)
 		dead_player_name.erase(std::remove(dead_player_name.begin(), dead_player_name.end(), '"'), dead_player_name.end());
 
 		// Construct a command with our message
-		pstring str;
-		str << "say \"" << Util::ReplaceString(Settings::Spammer::KillSpammer::message, "$nick", dead_player_name) << "\"";
+        std::string str;
+		str 
+            + "say \"" 
+            + Util::ReplaceString(Settings::Spammer::KillSpammer::message, "$nick", dead_player_name) 
+            + "\"";
 
 		// Execute our constructed command
 		engine->ExecuteClientCmd(str.c_str());
@@ -60,8 +63,10 @@ void Spammer::CreateMove(CUserCmd* cmd)
 		std::string message = currentSpamCollection->messages[std::rand() % currentSpamCollection->messages.size()];
 
 		// Construct a command with our message
-		pstring str;
-		str << "say " << message;
+        std::string str;
+		str 
+            + "say " 
+            + message;
 
 		// Execute our constructed command
 		engine->ExecuteClientCmd(str.c_str());

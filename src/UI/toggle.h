@@ -4,17 +4,38 @@
 #include "button.h"
 #include "../settings.h"
 
-class ToggleSwitch : public Component
-{
+class ToggleSwitchBase
+{ 
 protected:
-	Color text_color = Color (255, 255, 255, 200);
-	Color background_color = Color (160, 160, 160, 5);
-	Color background_color_hovered = Color (160, 160, 160, 10);
+	Color text_color            = Color (255, 255, 255, 255);
+	Color background_color      = Color (40, 40, 40, 150);
+
 public:
+    std::wstring text = L"toggle switch";
+    bool* setting;
+
+    ToggleSwitchBase(std::wstring text, bool* setting)
+        : text(text)
+        , setting(setting)
+    {
+    }
+
+    void* Toggle()
+    {
+        *setting = !*setting;
+    }
+};
+
+
+class ToggleSwitch : public ToggleSwitchBase, public Component
+{
+private:
+
+	/*
+     * Component Interaction CBs
+     */
+
 	bool clickStarted = false;
-	bool* setting;
-	std::string text = "toggle switch";
-	
 	void Event_OnClickStart ()
 	{
 		clickStarted = true;
@@ -24,7 +45,7 @@ public:
 	{
 		if (clickStarted)
 		{
-			*setting = !*setting;
+            ToggleSwitchBase::Toggle ();
 		}
 	}
 	
@@ -32,23 +53,27 @@ public:
 	{
 		clickStarted = false;
 	}
+
+protected: 
+    Color background_color_hovered = Color (160, 160, 160, 10);
+
+public:
 	
-	ToggleSwitch (std::string text, Vector2D position, Vector2D size, bool* setting)
+	ToggleSwitch (std::wstring text, Vector2D position, Vector2D size, bool* setting)
+        : ToggleSwitchBase(text, setting)
+        , Component(position, size)
 	{
-		this->position = position;
-		this->size = size;
-		this->text = text;
-		this->setting = setting;
-		
 		this->onMouseClickEndEvent		= MFUNC (&ToggleSwitch::Event_OnClickEnd, this);
 		this->onMouseClickStartEvent	= MFUNC (&ToggleSwitch::Event_OnClickStart, this);
 		this->onMouseLeaveEvent			= MFUNC (&ToggleSwitch::Event_OnMouseLeave, this);
 	}
 	
-	ToggleSwitch (std::string text, Vector2D position, int height, bool* setting)
-		: ToggleSwitch (text, position, LOC (height + 25 + Draw::GetTextSize (text.c_str(), normal_font).x, height), setting) { }
+	ToggleSwitch (std::wstring text, Vector2D position, int height, bool* setting)
+		: ToggleSwitch (text, position, LOC (height + 25 + Draw::GetTextSize (text.c_str(), normal_font).x, height), setting) 
+    { 
+    }
 	
-	
+
 	void Draw ()
 	{
 		Clear (isHovered ? background_color_hovered : background_color);
@@ -71,25 +96,19 @@ public:
 	}
 };
 
-class ToggleButton : public Button
+class ToggleButton : public ToggleSwitchBase, public Button
 {
-protected:
-	Color text_color = Color (255, 255, 255, 255);
+protected: 
 	Color hovered_outline_color = Color (200, 200, 200, 20);
-	Color background_color = Color (40, 40, 40, 150);
+
 public:
-	bool* setting;
-	
-	void OnClicked ()
-	{
-		*setting = !*setting;
-	}
-	
-	ToggleButton (std::string text, Vector2D position, Vector2D size, bool* setting)
-						: Button (text, position, size)
+
+	ToggleButton (std::wstring text, Vector2D position, Vector2D size, bool* setting)
+        : ToggleSwitchBase(text, setting)
+        , Button (text, position, size)
 	{
 		this->setting = setting;
-		this->OnClickedEvent = MFUNC (&ToggleButton::OnClicked, this);
+		this->OnClickedEvent = MFUNC (&ToggleSwitchBase::Toggle, this);
 	}
 	
 	void Draw ()
@@ -105,6 +124,6 @@ public:
 			DrawRectangle (LOC (0, 0), size, hovered_outline_color);
 		}
 		
-		DrawCenteredString (text, normal_font, text_color, LOC (size.x / 2, size.y / 2));
+		DrawCenteredString (reinterpret_cast<ToggleSwitchBase*>(this)->text, normal_font, text_color, LOC (size.x / 2, size.y / 2));
 	}
 };

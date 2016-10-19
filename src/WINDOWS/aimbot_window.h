@@ -25,5 +25,5 @@ private:
 	ToggleSwitch* ts_autocrouch;
 	ToggleSwitch* ts_autostop;
 public:
-	AimbotWindow (std::string title, Vector2D size, Vector2D position, Color backgroundColor);
+	AimbotWindow (std::wstring title, Vector2D size, Vector2D position, Color backgroundColor);
 };
