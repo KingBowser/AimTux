@@ -1,25 +1,25 @@
 #include "panel.h"
 
 
+Panel::Panel (Vector2D position, Vector2D size, Color backgroundColor) 
+    : Component (position, size)
+    , backGroundColor(backGroundColor)
+{
+}
+
+
+Panel::Panel (Vector2D position, Vector2D size) 
+    : Component(position, size)
+{
+}
+
+Panel::Panel (Vector2D position) 
+    : Component(position)
+{
+}
+
 Panel::Panel ()
 {
-}
-
-
-Panel::Panel (Vector2D position) : Panel ()
-{
-	this->position = position;
-}
-
-Panel::Panel (Vector2D position, Vector2D size) : Panel (position)
-{
-	this->size = size;
-}
-
-
-Panel::Panel (Vector2D position, Vector2D size, Color backgroundColor) : Panel (position, size)
-{
-	this->backGroundColor = backgroundColor;
 }
 
 void Panel::Draw ()
