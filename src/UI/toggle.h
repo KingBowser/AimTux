@@ -11,12 +11,10 @@ protected:
 	Color background_color      = Color (40, 40, 40, 150);
 
 public:
-    std::wstring text = L"toggle switch";
     bool* setting;
 
-    ToggleSwitchBase(std::wstring text, bool* setting)
-        : text(text)
-        , setting(setting)
+    ToggleSwitchBase(bool* setting)
+        : setting(setting)
     {
     }
 
@@ -56,11 +54,13 @@ private:
 
 protected: 
     Color background_color_hovered = Color (160, 160, 160, 10);
+    std::wstring text = L"toggle switch";
 
 public:
 	
 	ToggleSwitch (std::wstring text, Vector2D position, Vector2D size, bool* setting)
-        : ToggleSwitchBase(text, setting)
+        : ToggleSwitchBase(setting)
+        , text(text)
         , Component(position, size)
 	{
 		this->onMouseClickEndEvent		= MFUNC (&ToggleSwitch::Event_OnClickEnd, this);
@@ -104,7 +104,7 @@ protected:
 public:
 
 	ToggleButton (std::wstring text, Vector2D position, Vector2D size, bool* setting)
-        : ToggleSwitchBase(text, setting)
+        : ToggleSwitchBase(setting)
         , Button (text, position, size)
 	{
 		this->setting = setting;
@@ -124,6 +124,6 @@ public:
 			DrawRectangle (LOC (0, 0), size, hovered_outline_color);
 		}
 		
-		DrawCenteredString (reinterpret_cast<ToggleSwitchBase*>(this)->text, normal_font, text_color, LOC (size.x / 2, size.y / 2));
+		DrawCenteredString (text, normal_font, text_color, LOC (size.x / 2, size.y / 2));
 	}
 };
